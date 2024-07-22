@@ -6,14 +6,16 @@ import { app } from '@microsoft/teams-js';
 
 function App() {
   const [count, setCount] = useState(0)
-    const [hostname, setHostname] = useState('')
+    const [userId, setUserId] = useState('')
+    const [insideTeams, setInsideTeams] = useState(false)
 
     useEffect(() => {
         app.initialize().then(function () {
             app.getContext().then(function (context) {
-                if (context?.app?.host?.name) {
-                    setHostname(context?.app?.host?.name)
-                }
+                const userName = context.user?.id || '';
+
+                setUserId(userName);
+                setInsideTeams(true);
             });
         });
 
@@ -38,10 +40,13 @@ function App() {
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
-      <p className="read-the-docs">
-        Host name in teams is: {hostname} : if that was blank, it isn't in teams
-      </p>
-        <p>See if the env name worked: {import.meta.env.APP_NAME}</p>
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px'}}>
+            <h2>Teams Context</h2>
+            <div style={{display: "flex", flexDirection: "column", alignItems: 'start'}}>
+                <p>Inside Teams: {insideTeams ? '✅' : '❌'} </p>
+                <p>User ID: <code>{userId}</code></p>
+            </div>
+        </div>
     </>
   )
 }

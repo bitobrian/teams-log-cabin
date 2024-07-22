@@ -3,8 +3,13 @@ const path = require('path');
 const dotenv = require('dotenv');
 const archiver = require('archiver');
 
-// Load environment variables from .env file in ../config
-dotenv.config({ path: path.join(__dirname, '../config/.env') });
+if (process.env.CI) {
+    dotenv.config({ path: path.join(__dirname, '../config/.env') });
+}
+else {
+    dotenv.config({ path: path.join(__dirname, '../config/.env.local') });
+}
+
 
 const assetsSrcDir = path.join(__dirname, '../assets');
 const manifestSrcDir = path.join(__dirname, '../package');
